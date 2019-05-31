@@ -11,14 +11,20 @@ public class Solution {
     
     Facility fac;
     
-    /*Custo de implantação da facilidade i*/
-    public double facCostImp[];
+    /*Custo total da implantação das facilidades*/
+    public double facCost;
+    
+    /*Quantidade de facilidades usadas*/
+    public int facUsedCount;
     
     /*Numero de facilidades*/
     public int N;
     
     /*Numero de clientes*/
     public int cli;
+    
+    /*Salvar demanda de cada facilidade*/
+    public double save[];
     
     public static final int MAX = 99999999;
 
@@ -37,6 +43,7 @@ public class Solution {
         cli = fac.cli;
         facOf = new int[cli];
         facU = new boolean[N];
+        save = new double[N];
     }
     
     /*Número de facilidades usadas*/
@@ -75,23 +82,65 @@ public class Solution {
         double costCnd[] = new double[cli]; // custo canditado para atendimento do cliente j
         fill(costCnd, MAX);
         
+        boolean alt = false;
         for (int f=0; f<N; f++) {
-            
-            for (int c=0; c<cli; c++) {
-                
-                if (fac.costFacCli[f][c] <= costCnd[c]) {
-                    if(costCnd[c] == MAX) {
-                        if (fac.sumDem[f] + fac.demCli[c] <= fac.c[f]) {
-                            facU[f] = true;
-                            fac.sumDem[f] += fac.demCli[c];
-                            facOf[c] = f;
-                            costCnd[c] = fac.costFacCli[f][c];
+            alt = false;
+            if(!alt) {
+                for (int c=0; c<cli; c++) {
+                    double capacity = fac.c[f] - fac.demCli[c] - fac.sumDem[f];
+                    if (capacity < 0)
+                        continue;
+                    
+                    if (fac.costFacCli[f][c] < costCnd[c]) {
+                        if(costCnd[c] == MAX) {
+                            if (fac.sumDem[f] + fac.demCli[c] <= fac.c[f]) {
+                                facU[f] = true;
+                                fac.sumDem[f] += fac.demCli[c];
+                                facOf[c] = f;
+                                costCnd[c] = fac.costFacCli[f][c];
+                            }
+                        } else {
+                            if (fac.sumDem[f] + fac.demCli[c] <= fac.c[f]) {
+                                int fc = facOf[c];
+                                fac.sumDem[fc] -= fac.demCli[c];
+
+                                if (fac.sumDem[fc] == 0)
+                                    facU[fc] = false;
+                                else if (!facU[f])
+                                    facU[f] = true;
+
+                                facOf[c] = f;
+                                fac.sumDem[f] += fac.demCli[c];
+                                costCnd[c] = fac.costFacCli[f][c];  
+                                alt = true;
+                            }
                         }
                     }
                 }
-            }
+                if (f!=0 && alt) {
+                    f = -1;
+                }
+            }            
         }
+        for (int s=0; s<N; s++)
+            save[s] = fac.sumDem[s];
     }
     
-    
+    public void save() 
+    {
+        facCost = cost();
+        facUsedCount = facUsedCount();
+        
+        fill(save, 0);
+        
+        for (int i=0; i<cli; i++) 
+            save[facOf[i]] += fac.demCli[i];
+        
+        fill(facU, false);
+        
+        for (int i=0; i<cli; i++) 
+            if(save[facOf[i]] > 0)
+                facU[facOf[i]] = true;
+        
+    }
 }

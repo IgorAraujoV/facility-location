@@ -52,7 +52,7 @@ public class Main {
         Facility fac = new Facility("Instancias/cap41.txt");
         Solution sol = new Solution(fac);
         sol.run();
-        //sol.updateAtributes();
+        sol.save();
         System.out.println(sol);
 //
 //        HC hill = new HC(fac, sol);
