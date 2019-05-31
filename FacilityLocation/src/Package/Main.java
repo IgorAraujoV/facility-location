@@ -1,4 +1,5 @@
 import Package.Facility;
+import Package.HillClimb;
 import Package.Solution;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,11 +53,11 @@ public class Main {
         Facility fac = new Facility("Instancias/cap41.txt");
         Solution sol = new Solution(fac);
         sol.run();
-        sol.save();
         System.out.println(sol);
 //
-//        HC hill = new HC(fac, sol);
-//        hill.run();
+        HillClimb hill = new HillClimb(fac, sol);
+        hill.run();
+        System.out.println(hill);
 //        VND vnd = new VND(fac,sol);
 //        vnd.run();
         

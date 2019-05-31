@@ -31,7 +31,7 @@ public class Solution {
     @Override
     public String toString() {
         return "Solution { " + 
-                "Quantidade de facilidades = " + facUsedCount()
+                "Facilidades Usadas = " + facUsedCount()
                 + ", Custo = " + cost()
                 + '}';
     }
@@ -79,14 +79,16 @@ public class Solution {
         fill(facU, false);
         fill(fac.sumDem, 0);
         
-        double costCnd[] = new double[cli]; // custo canditado para atendimento do cliente j
+        /*Custo canditado para atendimento do cliente j*/
+        double costCnd[] = new double[cli]; 
         fill(costCnd, MAX);
         
-        boolean alt = false;
+        boolean alt;
         for (int f=0; f<N; f++) {
             alt = false;
             if(!alt) {
                 for (int c=0; c<cli; c++) {
+                    
                     double capacity = fac.c[f] - fac.demCli[c] - fac.sumDem[f];
                     if (capacity < 0)
                         continue;
@@ -115,32 +117,12 @@ public class Solution {
                                 alt = true;
                             }
                         }
-                    }
+                    }                    
                 }
                 if (f!=0 && alt) {
                     f = -1;
                 }
             }            
         }
-        for (int s=0; s<N; s++)
-            save[s] = fac.sumDem[s];
-    }
-    
-    public void save() 
-    {
-        facCost = cost();
-        facUsedCount = facUsedCount();
-        
-        fill(save, 0);
-        
-        for (int i=0; i<cli; i++) 
-            save[facOf[i]] += fac.demCli[i];
-        
-        fill(facU, false);
-        
-        for (int i=0; i<cli; i++) 
-            if(save[facOf[i]] > 0)
-                facU[facOf[i]] = true;
-        
     }
 }
