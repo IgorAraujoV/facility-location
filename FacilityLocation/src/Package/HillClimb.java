@@ -33,50 +33,45 @@ public class HillClimb {
 
     @Override
     public String toString() {
-        return "\nHillClimb { " + "Facilidades Usadas = " + facUsedCount + ", Soma custo = " + sol.cost()+ " }";
+        return "\nHillClimb { " + "Facilidades Usadas = " + sol.facUsedCount() + ", Soma custo = " + sol.cost()+ " }";
     }
     
     public int run() 
     {
-        boolean moved;
-        
-        do {
-            moved = false;
-            for (int c=0; c<fac.cli; c++) {
-                here:
-                for (int f=0; f<fac.N; f++ ) {
+        for (int c=0; c<fac.cli; c++) {
+            here:
+            for (int f=0; f<fac.N; f++ ) {
 
-                    int fc = facOf[c];
+                int fc = facOf[c];
 
-                    if (fc != f && (save[f] + demCli[c] <= fac.c[f])) {
-                        fac.sumDem[f] += demCli[c];
-                        fac.sumDem[fc] -= demCli[c];
+                if (fc != f && (fac.sumDem[f] + demCli[c] <= fac.c[f])) {
+                    fac.sumDem[f] += demCli[c];
+                    fac.sumDem[fc] -= demCli[c];
 
-                        if(fac.sumDem[fc] == 0);
+                    if(fac.sumDem[fc] == 0);
+                        facU[fc] = false;
+
+                    double costFC_C = fac.costFacCli[fc][c] + fac.costImp[fc];
+                    double costF_C  = fac.costFacCli[f][c] + fac.costImp[f]; 
+
+                    //System.out.println("Cost_FC_C : " + costFC_C + " FC :" + fc + " F : " + f + " C : " + c+ " CostF_C : " + costF_C);
+
+                    if(costF_C < costFC_C) {
+                        sol.facU[f] = true;
+                        sol.facOf[c] = f;
+
+                        if (fac.sumDem[fc] == 0) 
                             facU[fc] = false;
 
-                        double costFC_C = !facU[fc]? (fac.costFacCli[fc][c] + fac.costImp[fc]) : fac.costFacCli[fc][c];
-                        double costF_C  = !facU[f]? (fac.costFacCli[f][c] + fac.costImp[f]) : fac.costFacCli[f][c]; 
-
-                        if(costF_C < costFC_C) {
-                            sol.facU[f] = true;
-                            sol.facOf[c] = f;
-
-                            if (fac.sumDem[fc] == 0) {
-                                facU[fc] = false;
-                                facUsedCount--;
-                            }
-                            moved = true;
-                            break here;
-                        } else {
-                            facU[fc] = true;
-                            fac.sumDem[f] -= demCli[c];
-                            fac.sumDem[fc] += demCli[c];
-                        }
+                    } else {
+                        facU[fc] = true;
+                        fac.sumDem[f] -= demCli[c];
+                        fac.sumDem[fc] += demCli[c];
                     }
                 }
             }
-        } while (moved);      
+            //System.out.println("\nFacOf : " + facOf[c]);
+        }
         
         return 0;
     }
