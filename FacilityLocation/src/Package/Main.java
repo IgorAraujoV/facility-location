@@ -1,6 +1,7 @@
 import Package.Facility;
 import Package.HillClimb;
 import Package.Solution;
+import Package.VND;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -58,8 +59,9 @@ public class Main {
         HillClimb hill = new HillClimb(fac, sol);
         hill.run();
         System.out.println(hill);
-//        VND vnd = new VND(fac,sol);
-//        vnd.run();
+        
+        VND vnd = new VND(fac,sol);
+        vnd.run();
         
 
 //        ILS ils = new ILS(100000, 5);
