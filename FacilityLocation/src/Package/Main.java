@@ -60,8 +60,9 @@ public class Main {
         hill.run();
         System.out.println(hill);
         
-        VND vnd = new VND(fac,sol);
+        VND vnd = new VND(fac, sol);
         vnd.run();
+        System.out.println(vnd);
         
 
 //        ILS ils = new ILS(100000, 5);
