@@ -104,14 +104,6 @@ public class Solution {
         fill(facU, false);
         fill(fac.sumDem, 0);
         
-        /*Custo canditado para atendimento do cliente j*/
-        double costCnd[] = new double[cli]; 
-        fill(costCnd, MAX);
-        
-        for (int c=0; c<cli; c++) 
-            sumDem += fac.demCli[c];
-        
-        //boolean alt;
         for (int f=0; f<N; f++) {
             for (int c=0; c<cli; c++) {
 
@@ -131,5 +123,40 @@ public class Solution {
 //        System.out.println("\n, FacOf = {");
 //        for (int c=0; c<cli; c++) 
 //            System.out.print(facOf[c] + ", ");
+    }
+    
+    public void runRandom(int[] cIdx, int[] fIdx) {
+        fill(facOf, -1);
+        fill(facU, false);
+        fill(fac.sumDem, 0);
+        
+        for (int f1=0; f1<N; f1++) {
+            
+            int f = fIdx[f1];
+            
+            for (int c1 = 0; c1<cli; c1++) {
+                
+                int c = cIdx[c1];
+                
+                double capacity = fac.c[f] - fac.demCli[c] - fac.sumDem[f];
+                if (capacity < 0 || facOf[c] != -1)
+                    continue;
+
+                fac.sumDem[f] += fac.demCli[c];
+                facOf[c] = f;
+            }  
+            if(fac.sumDem[f] > 0) {
+                facU[f] = true;
+            } else {
+                facU[f] = false;
+            }
+        }
+    }
+    
+    public void copy(Solution sol) {
+        for (int c=0; c<cli; c++)
+            facOf[c] = sol.facOf[c];
+        for (int f=0; f<N; f++) 
+            facU[f] = sol.facU[f];
     }
 }

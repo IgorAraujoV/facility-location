@@ -107,10 +107,7 @@ public class VND {
         facOf = sol.facOf;
         facU = sol.facU;
         
-        fill(sumDem, 0);
-        
-        for (int i = 0; i < fIdx.length; i++)
-            fIdx[i] = i;
+        //fill(sumDem, 0);
         
         boolean flag = false;
         do {
