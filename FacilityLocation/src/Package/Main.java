@@ -1,5 +1,6 @@
 import Package.Facility;
 import Package.HillClimb;
+import Package.RandomMultiStart;
 import Package.Solution;
 import Package.VND;
 import java.io.File;
@@ -64,6 +65,9 @@ public class Main {
         vnd.run();
         System.out.println(vnd);
         
+        RandomMultiStart rms = new RandomMultiStart(100, fac);
+        rms.run();
+        System.out.println(rms);
 
 //        ILS ils = new ILS(100000, 5);
 //        ils.setFac(fac);
