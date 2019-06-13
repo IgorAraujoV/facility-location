@@ -38,9 +38,16 @@ public class VND {
             for (int f : fIdx) {
                 
                 if(fc != f && (sumDem[f] + demCli[c] <= fac.c[f])) {
-                    double costT_FC_C = facU[fc] ? fac.costFacCli[fc][c] : fac.costFacCli[fc][c] + fac.costImp[fc];
-                    double costT_F_C =  facU[f]  ? fac.costFacCli[f][c] : fac.costFacCli[f][c] + fac.costImp[f];
-                    
+
+                    double costT_FC_C = fac.costFacCli[fc][c];
+                    double costT_F_C =  fac.costFacCli[f][c];
+
+                    if (fac.sumDem[fc] == fac.demCli[c])
+                        costT_FC_C += fac.costImp[fc];
+
+                    if (fac.sumDem[f] == 0)
+                        costT_F_C += fac.costImp[f];
+
                     double costResult = costT_FC_C - costT_F_C;
                     
                     if (costResult > 0) {
@@ -84,7 +91,7 @@ public class VND {
                     double costSwap = sol.costSwapClients(C1, C2);
                     boolean isBest = costTot - costSwap > 0;
                     
-                    if ((costC1_fC2 > 0 || costC2_fC1 > 0) && isBest) {
+                    if ((costC1_fC2 < 0 || costC2_fC1 < 0)) {
                         
                         sumDem[fC1] += -demCli[C1] + demCli[C2];
                         sumDem[fC2] += -demCli[C2] + demCli[C1];
@@ -107,10 +114,7 @@ public class VND {
         facOf = sol.facOf;
         facU = sol.facU;
         
-        fill(sumDem, 0);
-        
-        for (int i = 0; i < fIdx.length; i++)
-            fIdx[i] = i;
+        //fill(sumDem, 0);
         
         boolean flag = false;
         do {

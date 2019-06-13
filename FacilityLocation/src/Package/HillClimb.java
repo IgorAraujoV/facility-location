@@ -36,7 +36,7 @@ public class HillClimb {
         return "\nHillClimb { " + "Facilidades Usadas = " + sol.facUsedCount() + ", Soma custo = " + sol.cost()+ " }";
     }
     
-    public int run() 
+    public void run() 
     {
         for (int c=0; c<fac.cli; c++) {
             here:
@@ -45,34 +45,31 @@ public class HillClimb {
                 int fc = facOf[c];
 
                 if (fc != f && (fac.sumDem[f] + demCli[c] <= fac.c[f])) {
-                    fac.sumDem[f] += demCli[c];
-                    fac.sumDem[fc] -= demCli[c];
 
-                    if(fac.sumDem[fc] == 0);
-                        facU[fc] = false;
+                    double costFC_C = fac.costFacCli[fc][c];
+                    if (fac.sumDem[fc] == fac.demCli[c])
+                        costFC_C += fac.costImp[fc];
 
-                    double costFC_C = fac.costFacCli[fc][c] + fac.costImp[fc];
-                    double costF_C  = fac.costFacCli[f][c] + fac.costImp[f]; 
+                    double costF_C  = fac.costFacCli[f][c];
+                    if (fac.sumDem[f] == 0)
+                        costF_C += fac.costImp[f];
 
                     //System.out.println("Cost_FC_C : " + costFC_C + " FC :" + fc + " F : " + f + " C : " + c+ " CostF_C : " + costF_C);
 
                     if(costF_C < costFC_C) {
+                        fac.sumDem[f] += demCli[c];
+                        fac.sumDem[fc] -= demCli[c];
+
                         sol.facU[f] = true;
                         sol.facOf[c] = f;
 
                         if (fac.sumDem[fc] == 0) 
                             facU[fc] = false;
 
-                    } else {
-                        facU[fc] = true;
-                        fac.sumDem[f] -= demCli[c];
-                        fac.sumDem[fc] += demCli[c];
                     }
                 }
             }
             //System.out.println("\nFacOf : " + facOf[c]);
         }
-        
-        return 0;
     }
 }

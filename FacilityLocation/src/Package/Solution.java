@@ -32,7 +32,7 @@ public class Solution {
     public String toString() {
         return "Solution { " + 
                 "Facilidades Usadas = " + facUsedCount()
-                + ", Custo = " + cost()
+                + ", Soma Custo = " + cost()
                 + '}';
     }
     
@@ -111,7 +111,6 @@ public class Solution {
         for (int c=0; c<cli; c++) 
             sumDem += fac.demCli[c];
         
-        //boolean alt;
         for (int f=0; f<N; f++) {
             for (int c=0; c<cli; c++) {
 
