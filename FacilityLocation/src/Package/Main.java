@@ -56,18 +56,18 @@ public class Main {
         Solution sol = new Solution(fac);
         sol.run();
         System.out.println(sol);
-//
+        System.out.println("");
+
         HillClimb hill = new HillClimb(fac, sol);
         hill.run();
         System.out.println(hill);
         
         VND vnd = new VND(fac, sol);
-        vnd.run();
+        vnd.run(sol);
         System.out.println(vnd);
         
         RandomMultiStart rms = new RandomMultiStart(100, fac);
-        rms.run();
-        System.out.println(rms);
+        System.out.println(rms.run(sol));
 
 //        ILS ils = new ILS(100000, 5);
 //        ils.setFac(fac);

@@ -20,12 +20,14 @@ public class Solution {
     /*Numero de facilidades*/
     public int N;
     
+    /*Soma da demanda da facilidade i*/
+    public double sumDem[];
+    
     /*Numero de clientes*/
     public int cli;
     
     /*Salvar demanda de cada facilidade*/
     public double save[];
-    public double sumDem;
     public static final int MAX = 99999999;
 
     @Override
@@ -44,7 +46,7 @@ public class Solution {
         facOf = new int[cli];
         facU = new boolean[N];
         save = new double[N];
-        sumDem = 0;
+        sumDem = new double[fac.sumDem.length];
     }
     
     /*Número de facilidades usadas*/
@@ -128,7 +130,7 @@ public class Solution {
     public void runRandom(int[] cIdx, int[] fIdx) {
         fill(facOf, -1);
         fill(facU, false);
-        fill(fac.sumDem, 0);
+        fill(sumDem, 0);
         
         for (int f1=0; f1<N; f1++) {
             
@@ -138,11 +140,11 @@ public class Solution {
                 
                 int c = cIdx[c1];
                 
-                double capacity = fac.c[f] - fac.demCli[c] - fac.sumDem[f];
+                double capacity = fac.c[f] - fac.demCli[c] - sumDem[f];
                 if (capacity < 0 || facOf[c] != -1)
                     continue;
 
-                fac.sumDem[f] += fac.demCli[c];
+                sumDem[f] += fac.demCli[c];
                 facOf[c] = f;
             }  
             if(fac.sumDem[f] > 0) {
@@ -156,7 +158,9 @@ public class Solution {
     public void copy(Solution sol) {
         for (int c=0; c<cli; c++)
             facOf[c] = sol.facOf[c];
-        for (int f=0; f<N; f++) 
+        for (int f=0; f<N; f++) {
             facU[f] = sol.facU[f];
+            sumDem[f] = sol.sumDem[f];
+        }
     }
 }

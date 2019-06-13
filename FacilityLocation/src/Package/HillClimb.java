@@ -39,7 +39,7 @@ public class HillClimb {
     public void run() 
     {
         for (int c=0; c<fac.cli; c++) {
-            here:
+            
             for (int f=0; f<fac.N; f++ ) {
 
                 int fc = facOf[c];
