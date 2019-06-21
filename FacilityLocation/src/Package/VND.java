@@ -4,15 +4,13 @@ import static java.util.Arrays.fill;
 
 public class VND {
     Facility fac;
-    Solution sol;
     public int fIdx[], cIdx[], lb, facUsedCount;
     public int facOf[];
-    public double sumDem[];
+    public double sumDem[], cost;
     public boolean facU[];
     
-    public VND(Facility fac, Solution sol) {
+    public VND(Facility fac) {
         this.fac = fac;
-        this.sol = sol;
         cIdx = new int[fac.cli];
         fIdx = new int[fac.N];
         for (int i = 0; i < fac.N; i++) 
@@ -25,8 +23,8 @@ public class VND {
     @Override
     public String toString() {
         return "\nVND { " + 
-                "Facilidades Usadas = " + sol.facUsedCount()
-                + ", Soma Custo = " + sol.cost()
+                "Facilidades Usadas = " + facUsedCount
+                + ", Soma Custo = " + cost
                 + '}';
     }
     
@@ -104,6 +102,7 @@ public class VND {
     
     public void run(Solution sol) {
         facUsedCount = sol.facUsedCount();
+        cost = sol.cost();
         sumDem = sol.sumDem;
         facOf = sol.facOf;
         facU = sol.facU;

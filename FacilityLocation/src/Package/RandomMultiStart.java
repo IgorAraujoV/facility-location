@@ -23,7 +23,7 @@ public class RandomMultiStart {
     public String run(Solution bestSol) {
 
         Solution current = new Solution(fac);
-        VND vnd = new VND(fac, current);
+        VND vnd = new VND(fac);
         
         //double bestCost = MAX;
         

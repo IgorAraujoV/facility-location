@@ -1,5 +1,6 @@
 import Package.Facility;
 import Package.HillClimb;
+import Package.IteratedLocalSearch;
 import Package.RandomMultiStart;
 import Package.Solution;
 import Package.VND;
@@ -62,16 +63,15 @@ public class Main {
         hill.run();
         System.out.println(hill);
         
-        VND vnd = new VND(fac, sol);
+        VND vnd = new VND(fac);
         vnd.run(sol);
         System.out.println(vnd);
         
         RandomMultiStart rms = new RandomMultiStart(100, fac);
-        System.out.println(rms.run(sol));
+        System.out.print(rms.run(sol));
 
-//        ILS ils = new ILS(100000, 5);
-//        ils.setFac(fac);
-//        ils.run();
+        IteratedLocalSearch ils = new IteratedLocalSearch(1000, 5, fac);
+        System.out.println(ils.run());
 
 //        RMS rms = new RMS(10000);
 //        rms.setFac(fac);
