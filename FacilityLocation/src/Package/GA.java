@@ -37,17 +37,21 @@ public class GA {
     } 
     
     public Solution[] select(){
-        //Utils.shuffler(popIdx);
+        Utils.shuffler(popIdx);
         Solution dad = pop.get(0);
-        for(int i = 1; i < k; i++)
-            if(pop.get(i).compareTo(dad) < 0)
-                dad = pop.get(i);
+        for(int i = 1; i < k; i++) {
+            int s = popIdx[i];
+            if(pop.get(s).compareTo(dad) < 0)
+                dad = pop.get(s);
+        }
  
-        //Utils.shuffler(popIdx);
+        Utils.shuffler(popIdx);
         Solution mom = null;
-        for(int i = 0; i < k; i++)
-            if(pop.get(i) != dad && (mom == null || pop.get(i).compareTo(mom) < 0))
-                mom = pop.get(i);
+        for(int i = 0; i < k; i++) {
+            int s = popIdx[i];
+            if(pop.get(s) != dad && (mom == null || pop.get(s).compareTo(mom) < 0))
+                mom = pop.get(s);
+        }
  
         return new Solution[]{dad,mom};
     }
@@ -73,18 +77,20 @@ public class GA {
         int count = Math.max(mom.facUsedCount(), dad.facUsedCount());
         int load[] = new int[count];
         
-        for (int i=0; i<a; i++) {
+        for (int c=0; c<a; c++) {
             
-            if (son.sumDem[mom.facOf[i]] + fac.demCli[i] < fac.c[son.facOf[i]]) {
-                son.sumDem[son.facOf[i]] += fac.demCli[i];
-                son.facOf[i] = mom.facOf[i];
-                son.facU[mom.facOf[i]] = true;
+            if (son.sumDem[mom.facOf[c]] + fac.demCli[c] < fac.c[son.facOf[mom.facOf[c]]]) {
+                son.sumDem[mom.facOf[c]] += fac.demCli[c];
+                son.facOf[c] = mom.facOf[c];
+                son.facU[mom.facOf[c]] = true;
             } else {
                 boolean fit = false;
+                Utils.shuffler(fIdx);
                 for(int j = 0; j < count; j++){
-                    if(son.sumDem[j] + fac.demCli[i] <= fac.c[son.facOf[j]]){
-                        son.sumDem[j] += fac.demCli[j];
-                        son.facOf[i] = j;
+                    int f = fIdx[j];
+                    if(son.sumDem[f] + fac.demCli[c] <= fac.c[son.facOf[f]]){
+                        son.sumDem[f] += fac.demCli[c];
+                        son.facOf[c] = f;
                         fit = true;
                         break;
                     }
@@ -95,18 +101,20 @@ public class GA {
             }
         }
         
-        for (int i=b; i<fac.cli; i++) {
+        for (int c=a; c<fac.cli; c++) {
             
-            if (son.sumDem[dad.facOf[i]] + fac.demCli[i] < fac.c[son.facOf[i]]) {
-                son.sumDem[son.facOf[i]] += fac.demCli[i];
-                son.facOf[i] = dad.facOf[i];
-                son.facU[dad.facOf[i]] = true;
+            if (son.sumDem[dad.facOf[c]] + fac.demCli[c] < fac.c[son.facOf[dad.facOf[c]]]) {
+                son.sumDem[dad.facOf[c]] += fac.demCli[c];
+                son.facOf[c] = dad.facOf[c];
+                son.facU[dad.facOf[c]] = true;
             } else {
                 boolean fit = false;
-                for(int j = 0; j < count; j++){
-                    if(son.sumDem[j] + fac.demCli[i] <= fac.c[son.facOf[j]]){
-                        son.sumDem[j] += fac.demCli[j];
-                        son.facOf[i] = j;
+                Utils.shuffler(fIdx);
+                for(int j = 0; j < fac.N; j++){
+                    int f = fIdx[j];
+                    if(son.sumDem[f] + fac.demCli[c] <= fac.c[son.facOf[f]]){
+                        son.sumDem[f] += fac.demCli[c];
+                        son.facOf[c] = f;
                         fit = true;
                         break;
                     }
@@ -150,21 +158,19 @@ public class GA {
 
                         sol.facOf[C1] = fC2;
                         sol.facOf[C2] = fC1;
-
-                        return;
                     }
                 }                
             }
         }
     }
     
-    public void run() {
+    public String run() {
         
         initPop();
+        
         for (int i = 0; i < ite; i++) {
-
             Collections.sort(pop);
-//            System.out.println(pop.get(0));
+            
             while (pop.size() > popSize)
                 pop.remove(pop.size() - 1);
 
@@ -186,12 +192,18 @@ public class GA {
                 if (!pop.contains(son2))
                     pop.add(son2);
             }
-            System.out.println(son1.facUsedCount() + " " + son1.cost());
-            System.out.println(son2.facUsedCount() + " " + son2.cost());
-            System.out.println("");
             
-            bestSol.copy(son2);
+            if(bestSol.compareTo(pop.get(0))<0) {
+                bestSol.copy(pop.get(0));
+            }
+            //System.out.println("");
+            
+            bestSol = crossover(son1, son2);
         }
-        System.out.println("GA: " + bestSol);
+        return "GA { " 
+                + "\n     Melhor solução {"
+                + "\n            Facilidades usadas : " 
+                + bestSol.facUsedCount() + "\n            Custo Total : " + bestSol.cost() + 
+                "\n     }"+ "\n}\n";
     }
 }

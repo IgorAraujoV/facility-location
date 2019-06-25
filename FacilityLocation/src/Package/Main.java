@@ -5,6 +5,7 @@ import Package.IteratedLocalSearch;
 import Package.RandomMultiStart;
 import Package.Solution;
 import Package.VND;
+import Package.VNS;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -82,12 +83,11 @@ public class Main {
 //        sa.setFac(fac);
 //        sa.run();
 
-        GA ga = new GA(fac, 100, 0.5, 10, 100);
-        ga.run();
+        GA ga = new GA(fac, 100, 1, 10, 100);
+        System.out.println(ga.run());
 
-//        VNS vns = new VNS(1000,10,1);
-//        vns.setFac(fac);
-//        vns.run();
+        VNS vns = new VNS(1000, 7, 1, fac);
+        System.out.println(vns.run());
 
     }
 }

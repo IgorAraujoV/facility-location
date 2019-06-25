@@ -20,24 +20,24 @@ public class RandomMultiStart {
             fIdx[f] = f;
     }
     
-    public String run(Solution bestSol) {
+    public String run(Solution bestSol1) {
 
         Solution current = new Solution(fac);
         VND vnd = new VND(fac);
         
-        //double bestCost = MAX;
+        Utils.shuffler(cIdx);
+        Utils.shuffler(fIdx);
+        
+        bestSol.run();
         
         for (int i=0; i<nIter; i++) {
-            
-            Utils.shuffler(cIdx);
-            Utils.shuffler(fIdx);
             
             current.runRandom(cIdx, fIdx);
             vnd.run(current);
             
             if (current.cost() < bestSol.cost()) {   
                 bestSol.copy(current);
-                System.out.println(bestSol);
+                //System.out.println(bestSol);
             }
         }   
         return "\nRandomMultiStart { " 
@@ -45,15 +45,5 @@ public class RandomMultiStart {
                 + "\n            Facilidades usadas : " 
                 + bestSol.facUsedCount() + "\n            Custo Total : " + bestSol.cost() + 
                 "\n     }"+ "\n}\n";
-    }
-
-//    @Override
-//    public String toString() {
-//        return "\nRandomMultiStart { " 
-//                + "\n     Melhor solução {"
-//                + "\n            Facilidades usadas : " 
-//                + bestSol.facUsedCount() + "\n            Custo Total : " + bestSol.cost() + 
-//                "\n     }"+ "\n}\n";
-//    }
-    
+    }    
 }

@@ -76,47 +76,23 @@ public class Solution implements Comparable<Solution>{
         return cost;
     }
     
-        /* Custo total após mover o cliente c1 pra facilidade de c2
-         e o c2 para a facilidade do c1  */
-    public double costSwapClients(int c1, int c2) {
-        double cost = 0;
-        for (int i = 0; i < fac.N; i++) {
-            if (facU[i]) {
-                cost += fac.costImp[i];
-            }
-        }
-        for (int i = 0; i < fac.cli; i++) {
-            if (i == c1) {
-                cost += fac.costFacCli[facOf[c2]][i];
-                continue;
-            }
-            if (i == c2) {
-                cost += fac.costFacCli[facOf[c1]][i];
-                continue;
-            }
-            cost += fac.costFacCli[facOf[i]][i];
-        }
-        
-        return cost;
-    }
-    
     public void run() 
     {
         fill(facOf, -1);
         fill(facU, false);
-        fill(fac.sumDem, 0);
+        fill(sumDem, 0);
         
         for (int f=0; f<N; f++) {
             for (int c=0; c<cli; c++) {
 
-                double capacity = fac.c[f] - fac.demCli[c] - fac.sumDem[f];
+                double capacity = fac.c[f] - fac.demCli[c] - sumDem[f];
                 if (capacity < 0 || facOf[c] != -1)
                     continue;
 
-                fac.sumDem[f] += fac.demCli[c];
+                sumDem[f] += fac.demCli[c];
                 facOf[c] = f;
             }  
-            if(fac.sumDem[f] > 0) {
+            if(sumDem[f] > 0) {
                 facU[f] = true;
             } else {
                 facU[f] = false;

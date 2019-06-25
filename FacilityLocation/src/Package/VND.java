@@ -4,7 +4,7 @@ import static java.util.Arrays.fill;
 
 public class VND {
     Facility fac;
-    public int fIdx[], cIdx[], lb, facUsedCount;
+    public int fIdx[], cIdx[], facUsedCount;
     public int facOf[];
     public double sumDem[], cost;
     public boolean facU[];

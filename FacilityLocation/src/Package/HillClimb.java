@@ -12,6 +12,7 @@ public class HillClimb {
     public boolean facU[];
     public int demCli[];
     public double sumCost[];
+    public double sumDem[];
     
     public HillClimb(Facility fac, Solution sol) 
     {
@@ -23,6 +24,7 @@ public class HillClimb {
         facOf = sol.facOf;
         facU = sol.facU;
         demCli = fac.demCli;
+        sumDem = sol.sumDem;
         
         for (int f = 0; f < fac.N; f++) {
             save[f] = fac.c[f];
@@ -44,26 +46,26 @@ public class HillClimb {
 
                 int fc = facOf[c];
 
-                if (fc != f && (fac.sumDem[f] + demCli[c] <= fac.c[f])) {
+                if (fc != f && (sumDem[f] + demCli[c] <= fac.c[f])) {
 
                     double costFC_C = fac.costFacCli[fc][c];
-                    if (fac.sumDem[fc] == fac.demCli[c])
+                    if (sumDem[fc] == fac.demCli[c])
                         costFC_C += fac.costImp[fc];
 
                     double costF_C  = fac.costFacCli[f][c];
-                    if (fac.sumDem[f] == 0)
+                    if (sumDem[f] == 0)
                         costF_C += fac.costImp[f];
 
                     //System.out.println("Cost_FC_C : " + costFC_C + " FC :" + fc + " F : " + f + " C : " + c+ " CostF_C : " + costF_C);
 
                     if(costF_C < costFC_C) {
-                        fac.sumDem[f] += demCli[c];
-                        fac.sumDem[fc] -= demCli[c];
+                        sumDem[f] += demCli[c];
+                        sumDem[fc] -= demCli[c];
 
-                        sol.facU[f] = true;
-                        sol.facOf[c] = f;
+                        facU[f] = true;
+                        facOf[c] = f;
 
-                        if (fac.sumDem[fc] == 0) 
+                        if (sumDem[fc] == 0) 
                             facU[fc] = false;
 
                     }

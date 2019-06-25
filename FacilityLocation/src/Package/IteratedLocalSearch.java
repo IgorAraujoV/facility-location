@@ -3,7 +3,7 @@ package Package;
 public class IteratedLocalSearch {
     Facility fac;
     Solution bestSol;
-    int nFacChanged; //Numero de facilidades modificadas em cada iteração
+    int nFacClosed; //Numero de facilidades modificadas em cada iteração
     int nIter, cIdx[], fIdx[];
     
     final double MAX = 999999999;
@@ -11,7 +11,7 @@ public class IteratedLocalSearch {
     public IteratedLocalSearch(int iter, int facChanged, Facility fac) {
         
         nIter = iter;
-        nFacChanged = facChanged;
+        nFacClosed = facChanged;
         this.fac = fac;
         bestSol = new Solution(fac);
         
@@ -24,10 +24,10 @@ public class IteratedLocalSearch {
             fIdx[f] = f;
     }
     
-    /*Fecha nFacChanged facilidades 
+    /*Fecha nFacClosed facilidades 
       e realoca os clientes atendidos por ela
       em uma facilidade aleatoria*/
-    public void perturb(int nFacChanged, Solution current, Solution best) {
+    public void perturb(int nFacClosed, Solution current, Solution best) {
         
         current.copy(best);
         
@@ -35,8 +35,8 @@ public class IteratedLocalSearch {
         boolean facU[] = current.facU;
         double[] sumDem = current.sumDem;
         
-        /*Fecha nFacChanged facilidades*/
-        for (int k=0; k<nFacChanged; k++) {
+        /*Fecha nFacClosed facilidades*/
+        for (int k=0; k<nFacClosed; k++) {
             
             int facRand = Utils.rd.nextInt(fac.N);
             
@@ -50,40 +50,67 @@ public class IteratedLocalSearch {
         Utils.shuffler(fIdx);
         
         /*Realoca os clientes retirados em uma facilidade aleatoria*/
-        for (int c=0; c<fac.cli; c++) {
-            
-            if (facOf[c] != -1)
-                continue;
-            
-            for (int f=0; f<fac.N; f++) {
-                
-                int fR = fIdx[f];
-                
-                if (sumDem[fR] + fac.demCli[c] < fac.c[fR]) {
-                    
-                    if (!facU[fR])
-                        facU[fR] = true;
-                    
-                    sumDem[fR] += fac.demCli[c];
-                    facOf[c] = fR;
-                    
-                    break;
+        
+        //while (contains(facOf, -1)) {
+            for (int c=0; c<fac.cli; c++) {
+
+                if (facOf[c] != -1)
+                    continue;
+
+                for (int f=0; f<fac.N; f++) {
+
+                    int fR = fIdx[f];
+
+                    if (sumDem[fR] + fac.demCli[c] < fac.c[fR]) {
+
+                        if (!facU[fR])
+                            facU[fR] = true;
+
+                        sumDem[fR] += fac.demCli[c];
+                        facOf[c] = fR;
+
+                        break;
+                    }
                 }
             }
-        }
+        //}
+    }
+    
+    public boolean contains(int v[], int value)
+    {
+        for (int i=0; i<v.length; i++)
+            if (v[i] == value)
+                return true;
+        return false;
     }
     
     public String run() {
         Solution current = new Solution(fac);
-        current.run();
-        bestSol.run();
+        
+        Utils.shuffler(cIdx);
+        Utils.shuffler(fIdx);
+        
+        current.runRandom(cIdx, fIdx);
+        bestSol.runRandom(cIdx, fIdx);
         
         VND vnd = new VND(fac);
         vnd.run(current);
         
+        bestSol.copy(current);
+        
         for (int ite=0; ite<nIter; ite++) {
             
-            perturb(nFacChanged, current, bestSol);
+            perturb(nFacClosed, current, bestSol);
+            
+            for (int i=0; i<current.facOf.length; i++) {
+                boolean a = current.facOf[i] == -1;
+                if (a) {
+                    System.out.println(current.facOf[i] + " " + i);
+                    System.out.println(nFacClosed);
+                    System.out.println(ite);
+                    System.out.println("Deu ruim");
+                }
+            }
             
             vnd.run(current);
             
