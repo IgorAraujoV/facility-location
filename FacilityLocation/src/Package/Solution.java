@@ -2,7 +2,7 @@ package Package;
 
 import static java.util.Arrays.fill;
 
-public class Solution {
+public class Solution implements Comparable<Solution>{
     /*Facilidade que atende o cliente i*/
     public int facOf[];
     
@@ -162,5 +162,15 @@ public class Solution {
             facU[f] = sol.facU[f];
             sumDem[f] = sol.sumDem[f];
         }
+    }
+
+    @Override
+    public int compareTo(Solution s2) {
+        
+        if (cost() > s2.cost())
+            return 1;
+        else if (cost() < s2.cost())
+            return -1;
+        return 0;
     }
 }

@@ -1,4 +1,5 @@
 import Package.Facility;
+import Package.GA;
 import Package.HillClimb;
 import Package.IteratedLocalSearch;
 import Package.RandomMultiStart;
@@ -73,10 +74,6 @@ public class Main {
         IteratedLocalSearch ils = new IteratedLocalSearch(1000, 5, fac);
         System.out.println(ils.run());
 
-//        RMS rms = new RMS(10000);
-//        rms.setFac(fac);
-//        rms.run();
-
 //        GRASP graps = new GRASP(5,10000);
 //        graps.setFac(fac);
 //        graps.run();
@@ -85,9 +82,8 @@ public class Main {
 //        sa.setFac(fac);
 //        sa.run();
 
-//        GA ga = new GA(100,0.1,10,100);
-//        ga.setFac(fac);
-//        ga.run();
+        GA ga = new GA(fac, 100, 0.5, 10, 100);
+        ga.run();
 
 //        VNS vns = new VNS(1000,10,1);
 //        vns.setFac(fac);
