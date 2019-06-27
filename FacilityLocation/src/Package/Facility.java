@@ -58,7 +58,7 @@ public class Facility {
         }
         for (int i = 0; i < cli; i++) {
             if (demCli[i] > c[0]){
-                demCli[i] = 0;
+                demCli[i] = c[0];
             }
         }
         for (int i = 0; i < N; i++) {

@@ -75,11 +75,10 @@ public class GA {
         Solution son = new Solution(fac);
         //o filho não pode ter solução pior que o de seus pais (custo deve ser menor)
         int count = Math.max(mom.facUsedCount(), dad.facUsedCount());
-        int load[] = new int[count];
         
         for (int c=0; c<a; c++) {
             
-            if (son.sumDem[mom.facOf[c]] + fac.demCli[c] < fac.c[son.facOf[mom.facOf[c]]]) {
+            if (son.sumDem[mom.facOf[c]] + fac.demCli[c] <= fac.c[son.facOf[mom.facOf[c]]]) {
                 son.sumDem[mom.facOf[c]] += fac.demCli[c];
                 son.facOf[c] = mom.facOf[c];
                 son.facU[mom.facOf[c]] = true;
@@ -95,7 +94,7 @@ public class GA {
                         break;
                     }
                 }if(!fit) {
-                    System.out.println("oi");
+                    System.out.println("Error");
                     return null;
                 }
             }
@@ -103,7 +102,7 @@ public class GA {
         
         for (int c=a; c<fac.cli; c++) {
             
-            if (son.sumDem[dad.facOf[c]] + fac.demCli[c] < fac.c[son.facOf[dad.facOf[c]]]) {
+            if (son.sumDem[dad.facOf[c]] + fac.demCli[c] <= fac.c[son.facOf[dad.facOf[c]]]) {
                 son.sumDem[dad.facOf[c]] += fac.demCli[c];
                 son.facOf[c] = dad.facOf[c];
                 son.facU[dad.facOf[c]] = true;
@@ -119,7 +118,7 @@ public class GA {
                         break;
                     }
                 }if(!fit) {
-                    System.out.println("oi 2");
+                    System.out.println("Error 2");
                     return null;
                 }
             }
@@ -167,6 +166,7 @@ public class GA {
     public String run() {
         
         initPop();
+        bestSol.run();
         
         for (int i = 0; i < ite; i++) {
             Collections.sort(pop);
@@ -193,12 +193,9 @@ public class GA {
                     pop.add(son2);
             }
             
-            if(bestSol.compareTo(pop.get(0))<0) {
+            if(bestSol.compareTo(pop.get(0))>0) {
                 bestSol.copy(pop.get(0));
             }
-            //System.out.println("");
-            
-            bestSol = crossover(son1, son2);
         }
         return "GA { " 
                 + "\n     Melhor solução {"

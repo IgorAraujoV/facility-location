@@ -25,10 +25,6 @@ public class Solution implements Comparable<Solution>{
     
     /*Numero de clientes*/
     public int cli;
-    
-    /*Salvar demanda de cada facilidade*/
-    public double save[];
-    public static final int MAX = 99999999;
 
     @Override
     public String toString() {
@@ -45,8 +41,7 @@ public class Solution implements Comparable<Solution>{
         cli = fac.cli;
         facOf = new int[cli];
         facU = new boolean[N];
-        save = new double[N];
-        sumDem = new double[fac.sumDem.length];
+        sumDem = new double[N];
     }
     
     /*Número de facilidades usadas*/
@@ -72,7 +67,7 @@ public class Solution implements Comparable<Solution>{
         for (int i=0; i<cli; i++) {
             cost += fac.costFacCli[facOf[i]][i];
         }
-        
+        facCost = cost;
         return cost;
     }
     
@@ -123,7 +118,7 @@ public class Solution implements Comparable<Solution>{
                 sumDem[f] += fac.demCli[c];
                 facOf[c] = f;
             }  
-            if(fac.sumDem[f] > 0) {
+            if(sumDem[f] > 0) {
                 facU[f] = true;
             } else {
                 facU[f] = false;

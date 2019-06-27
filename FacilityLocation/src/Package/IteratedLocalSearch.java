@@ -35,45 +35,46 @@ public class IteratedLocalSearch {
         boolean facU[] = current.facU;
         double[] sumDem = current.sumDem;
         
+        Utils.shuffler(fIdx);
+        
         /*Fecha nFacClosed facilidades*/
         for (int k=0; k<nFacClosed; k++) {
             
             int facRand = Utils.rd.nextInt(fac.N);
             
-            for (int c=0; c<fac.cli; c++) 
-                if (facRand == facOf[c]) 
+            for (int c=0; c<fac.cli; c++) {
+                if (facRand == facOf[c]) {
                     facOf[c] = -1;
-            
+                    sumDem[facRand] -= fac.demCli[c];
+                }
+            }
             facU[facRand] = false;
         }
         
         Utils.shuffler(fIdx);
         
-        /*Realoca os clientes retirados em uma facilidade aleatoria*/
-        
-        //while (contains(facOf, -1)) {
-            for (int c=0; c<fac.cli; c++) {
+        /*Realoca os clientes retirados em uma facilidade aleatoria*/        
+        for (int c=0; c<fac.cli; c++) {
 
-                if (facOf[c] != -1)
-                    continue;
+            if (facOf[c] != -1)
+                continue;
 
-                for (int f=0; f<fac.N; f++) {
+            for (int f=0; f<fac.N; f++) {
 
-                    int fR = fIdx[f];
+                int fR = fIdx[f];
 
-                    if (sumDem[fR] + fac.demCli[c] < fac.c[fR]) {
+                if (sumDem[fR] + fac.demCli[c] <= fac.c[fR]) {
 
-                        if (!facU[fR])
-                            facU[fR] = true;
+                    if (!facU[fR])
+                        facU[fR] = true;
 
-                        sumDem[fR] += fac.demCli[c];
-                        facOf[c] = fR;
+                    sumDem[fR] += fac.demCli[c];
+                    facOf[c] = fR;
 
-                        break;
-                    }
+                    break;
                 }
             }
-        //}
+        }
     }
     
     public boolean contains(int v[], int value)
@@ -101,16 +102,6 @@ public class IteratedLocalSearch {
         for (int ite=0; ite<nIter; ite++) {
             
             perturb(nFacClosed, current, bestSol);
-            
-            for (int i=0; i<current.facOf.length; i++) {
-                boolean a = current.facOf[i] == -1;
-                if (a) {
-                    System.out.println(current.facOf[i] + " " + i);
-                    System.out.println(nFacClosed);
-                    System.out.println(ite);
-                    System.out.println("Deu ruim");
-                }
-            }
             
             vnd.run(current);
             

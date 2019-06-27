@@ -101,8 +101,6 @@ public class VND {
     }
     
     public void run(Solution sol) {
-        facUsedCount = sol.facUsedCount();
-        cost = sol.cost();
         sumDem = sol.sumDem;
         facOf = sol.facOf;
         facU = sol.facU;
@@ -116,5 +114,8 @@ public class VND {
                flag = N2();
             //System.out.println(sol);
         } while (flag);
+        
+        facUsedCount = sol.facUsedCount();
+        cost = sol.cost();
     }
 }

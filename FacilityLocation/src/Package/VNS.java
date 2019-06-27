@@ -29,24 +29,24 @@ public class VNS {
       e realoca os clientes atendidos por ela
       em uma facilidade aleatoria*/
     public void perturb(int nfacCloseByIte, Solution current, Solution best) {
-        if (nfacCloseByIte > 6)
-            nfacCloseByIte = 6;
         
         current.copy(best);
         
         int facOf[] = current.facOf;
         boolean facU[] = current.facU;
-        double[] sumDem = current.sumDem;
+        double sumDem[] = current.sumDem;
         
         /*Fecha nfacCloseByIte facilidades*/
         for (int k=0; k<nfacCloseByIte; k++) {
             
             int facRand = Utils.rd.nextInt(fac.N);
             
-            for (int c=0; c<fac.cli; c++) 
-                if (facRand == facOf[c]) 
+            for (int c=0; c<fac.cli; c++) {
+                if (facRand == facOf[c]) {
                     facOf[c] = -1;
-            
+                    sumDem[facRand] -= fac.demCli[c];
+                }
+            }
             facU[facRand] = false;
         }
         
@@ -62,7 +62,7 @@ public class VNS {
                 
                 int fR = fIdx[f];
                 
-                if (sumDem[fR] + fac.demCli[c] < fac.c[fR]) {
+                if (sumDem[fR] + fac.demCli[c] <= fac.c[fR]) {
                     
                     if (!facU[fR])
                         facU[fR] = true;
@@ -97,18 +97,7 @@ public class VNS {
         
             for (int ite=0; ite<nIter; ite++) {
 
-                perturb(nFacClosed, current, bestSol);
-
-//                for (int i=0; i<current.facOf.length; i++) {
-//                    boolean a = current.facOf[i] == -1;
-//                    if (a) {
-//                        System.out.println(current.facOf[i] + " " + i);
-//                        System.out.println(nFacClosed);
-//                        System.out.println(nbhCount);
-//                        System.out.println("Deu ruim");
-//                    }
-//                }
-                
+                perturb(nFacClosed, current, bestSol);                
                 vnd.run(current);
 
                 double cost = current.cost();
